@@ -1,508 +1,573 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>孙继远资源网</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      cursor: default;
-    }
-
-    /* 全局基础：高级极简 */
-    html, body {
-      min-height: 100vh;
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      color: #111;
-      line-height: 1.7;
-      overflow-x: hidden;
-      background: #0a0a0a;
-    }
-
-    /* 视频背景容器 */
-    .video-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    /* 视频背景 */
-    .video-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.8; /* 80%透明度 */
-    }
-
-    /* 视频叠加层，增强可读性 */
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(20, 20, 40, 0.7) 100%);
-    }
-
-    /* 核心容器 */
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 60px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* 首页区域 - 占满整个屏幕 */
-    .hero-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* 标题：渐入动画 */
-    .title {
-      font-size: 3.5rem;
-      font-weight: 700;
-      text-align: center;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-      color: #ffffff;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
-      background: linear-gradient(90deg, #ff7e5f, #feb47b, #86a8e7, #91eae4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 1px;
-    }
-
-    .subtitle {
-      font-size: 1.5rem;
-      color: #e0e0e0;
-      text-align: center;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease 0.3s forwards;
-      margin-bottom: 40px;
-      max-width: 600px;
-      line-height: 1.6;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    /* 滚动指示器 */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      animation: fadeInUp 1s ease 1.5s forwards;
-      color: #aaa;
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .scroll-indicator i {
-      font-size: 24px;
-      animation: bounce 2s infinite;
-    }
-
-    /* 内容模块：依次渐入 */
-    .item {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-      position: relative;
-      padding: 30px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      border-color: rgba(134, 168, 231, 0.5);
-    }
-
-    /* 图片：优雅动效 + 圆角 + 下载鼠标样式 */
-    .item img {
-      width: 100%;
-      height: auto;
-      border-radius: 16px;
-      transition: all 0.4s ease;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-      cursor: pointer; /* 鼠标变成小手，提示可点击 */
-      object-fit: cover;
-      max-height: 500px;
-    }
-
-    /* 悬浮微动：高级感 */
-    .item img:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .item h2 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #ffffff;
-      margin-top: 10px;
-    }
-
-    /* 下载提示文字 */
-    .download-tip {
-      font-size: 15px;
-      color: #86a8e7;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .download-tip i {
-      font-size: 18px;
-    }
-
-    /* 底部文字 */
-    .bottom {
-      margin-top: 80px;
-      padding: 50px 0;
-      text-align: center;
-      font-size: 1.5rem;
-      color: #feb47b;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease 1.2s forwards;
-      position: relative;
-      font-weight: 500;
-    }
-
-    /* 装饰元素 */
-    .decoration {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(134, 168, 231, 0.1);
-      z-index: -1;
-      filter: blur(40px);
-    }
-
-    .decoration-1 {
-      width: 300px;
-      height: 300px;
-      top: 10%;
-      left: 5%;
-      animation: float 8s infinite ease-in-out;
-    }
-
-    .decoration-2 {
-      width: 200px;
-      height: 200px;
-      bottom: 20%;
-      right: 10%;
-      animation: float 10s infinite ease-in-out 1s;
-      background: rgba(254, 180, 123, 0.1);
-    }
-
-    .decoration-3 {
-      width: 150px;
-      height: 150px;
-      top: 40%;
-      right: 15%;
-      animation: float 12s infinite ease-in-out 2s;
-      background: rgba(255, 126, 95, 0.1);
-    }
-
-    /* 渐入动画核心 */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* 弹跳动画 */
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
-    }
-
-    /* 浮动动画 */
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) translateX(0);
-      }
-      33% {
-        transform: translateY(-20px) translateX(20px);
-      }
-      66% {
-        transform: translateY(10px) translateX(-10px);
-      }
-    }
-
-    /* 依次延迟：让页面更有层次 */
-    .item1 { animation-delay: 0.4s; }
-    .item2 { animation-delay: 0.6s; }
-    .item3 { animation-delay: 0.8s; }
-    .item4 { animation-delay: 1.0s; }
-    .item5 { animation-delay: 1.2s; }
-    .item6 { animation-delay: 1.4s; }
-    .item7 { animation-delay: 1.6s; }
-
-    /* 响应式设计 */
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.5rem;
-      }
-      
-      .subtitle {
-        font-size: 1.2rem;
-      }
-      
-      .item {
-        padding: 20px;
-      }
-      
-      .item h2 {
-        font-size: 1.5rem;
-      }
-      
-      .bottom {
-        font-size: 1.3rem;
-      }
-      
-      .decoration {
-        display: none;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .title {
-        font-size: 2rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .wrap {
-        padding: 20px 15px;
-        gap: 40px;
-      }
-      
-      .item {
-        padding: 15px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美化页面 - 内含彩蛋</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '🎁';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 40px;
+            opacity: 0.5;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* 隐藏的彩蛋按钮 */
+        .easter-egg-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+            border: 3px solid white;
+        }
+        
+        .easter-egg-trigger:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+        
+        .easter-egg-trigger:active {
+            transform: scale(0.95);
+        }
+        
+        /* 彩蛋提示 */
+        .easter-egg-hint {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            border-left: 3px solid #ff6b6b;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .easter-egg-trigger:hover + .easter-egg-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+        
+        .item {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation-play-state: paused;
+            animation: itemFadeIn 0.8s forwards;
+        }
+        
+        .item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .item h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .item p {
+            color: #546e7a;
+            line-height: 1.6;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+        
+        /* 下载通知样式 */
+        .download-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            z-index: 9999;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+            border-left: 4px solid #fff;
+        }
+        
+        /* 彩蛋消息样式 */
+        .easter-egg-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(45deg, #ff6b6b, #ff3838);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 1001;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(255, 107, 107, 0.5);
+            border: 5px solid white;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .easter-egg-message.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            animation: shake 0.5s ease 0.5s;
+        }
+        
+        .easter-egg-message .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .easter-egg-message .emoji {
+            font-size: 60px;
+            animation: bounce 1s ease infinite alternate;
+        }
+        
+        .easter-egg-message .text {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .easter-egg-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .easter-egg-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        
+        /* 动画定义 */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes itemFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-20px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(-8deg); }
+            75% { transform: translate(-50%, -50%) rotate(8deg); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .easter-egg-message {
+                width: 90%;
+                font-size: 20px;
+                padding: 20px;
+            }
+            
+            .easter-egg-trigger {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+        
+        /* 秘密触发区域 */
+        .secret-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        /* 额外隐藏彩蛋 - 双击页面触发 */
+        .hidden-easter-egg {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            z-index: 1002;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .hidden-easter-egg.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    </style>
 </head>
 <body>
-
-<!-- 视频背景区域 -->
-<div class="video-container">
-  <!-- 
-    视频接口说明：
-    您可以将视频地址替换为以下任一格式：
-    1. 本地视频: ./background-video.mp4
-    2. 在线视频: https://example.com/background-video.mp4
-    3. 推荐使用高质量背景视频，确保文件大小适中
-  -->
-  <video class="video-bg" autoplay muted loop playsinline>
-    <!-- 这里可以替换为您的视频地址 -->
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-lake-1125-large.mp4" type="video/mp4">
-    <!-- 备用视频源 -->
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-lake-1125-large.mp4" type="video/mp4">
-    您的浏览器不支持视频标签。
-  </video>
-  <div class="video-overlay"></div>
-</div>
-
-<!-- 装饰元素 -->
-<div class="decoration decoration-1"></div>
-<div class="decoration decoration-2"></div>
-<div class="decoration decoration-3"></div>
-
-<!-- 首页区域 -->
-<section class="hero-section">
-  <h1 class="title">孙继远资源网</h1>
-  <p class="subtitle">探索孙继远的精彩瞬间，收藏珍贵记忆，每一张图片都承载着独特的故事与情感</p>
-  
-  <div class="scroll-indicator">
-    <i class="fas fa-chevron-down"></i>
-    <span>向下滚动浏览资源</span>
-  </div>
-</section>
-
-<div class="wrap">
-  <!-- 图片1 + 点击下载 -->
-  <div class="item item1">
-    <img src="./111.jpg" alt="孙继远思考" onclick="downloadImage(this.src, '孙继远思考.jpg')">
-    <h2>孙继远思考</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-
-  <!-- 图片2 + 点击下载 -->
-  <div class="item item2">
-    <img src="./2.jpg" alt="孙继远过生日" onclick="downloadImage(this.src, '孙继远过生日.jpg')">
-    <h2>孙继远过生日</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-
-  <!-- 图片3 + 点击下载 -->
-  <div class="item item3">
-    <img src="./3.jpg" alt="孙继远在上厕所" onclick="downloadImage(this.src, '孙继远在网吧.jpg')">
-    <h2>孙继远在厕所</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-  
-  <div class="item item4">
-    <img src="./4.jpg" alt="孙继远比手势" onclick="downloadImage(this.src, '孙继远比手势.jpg')">
-    <h2>孙继远比手势</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-  
-  <div class="item item5">
-    <img src="./5.JPG" alt="孙继远上体育课" onclick="downloadImage(this.src, '孙继远上体育课.jpg')">
-    <h2>孙继远上体育课</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-  
-  <div class="item item6">
-    <img src="./6.JPG" alt="孙继远上体育课" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
-    <h2>孙继远上体育课2</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-  
-  <div class="item item7">
-    <img src="./7.jpg" alt="孙继远上网吧" onclick="downloadImage(this.src, '孙继远上厕所2.jpg')">
-    <h2>孙继远上网吧</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-</div>
-
-<div class="bottom">
-  <i class="fas fa-exclamation-circle"></i> 孙继远欠我两块钱
-</div>
-
-<!-- 图片下载核心JS -->
-<script>
-  // 图片下载功能
-  function downloadImage(url, name) {
-    const link = document.createElement('a');
-    link.download = name; // 下载后的文件名
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    <!-- 秘密触发区域（点击左上角触发额外彩蛋） -->
+    <div class="secret-area" onclick="showHiddenEasterEgg()" title="点击这里也有惊喜！"></div>
     
-    // 添加下载反馈效果
-    const downloadFeedback = document.createElement('div');
-    downloadFeedback.innerHTML = `<i class="fas fa-check-circle"></i> 开始下载: ${name}`;
-    downloadFeedback.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(134, 168, 231, 0.9);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      z-index: 9999;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: slideIn 0.3s ease, fadeOut 0.3s ease 2s forwards;
-    `;
-    document.body.appendChild(downloadFeedback);
+    <div class="container">
+        <header class="header">
+            <h1>🎯 精美下载页面</h1>
+            <p>点击下方按钮开始下载，试试看能找到几个彩蛋？😉</p>
+        </header>
+        
+        <div class="items-grid">
+            <div class="item">
+                <h3><i class="fas fa-file-pdf"></i> 项目文档</h3>
+                <p>包含详细的项目说明和使用指南，帮助您快速上手。</p>
+                <button class="download-btn" onclick="downloadItem('项目文档.pdf')">
+                    <i class="fas fa-download"></i> 下载文档
+                </button>
+            </div>
+            
+            <div class="item">
+                <h3><i class="fas fa-images"></i> 设计资源</h3>
+                <p>高质量的设计素材和图标集合，适用于各种项目需求。</p>
+                <button class="download-btn" onclick="downloadItem('设计资源.zip')">
+                    <i class="fas fa-download"></i> 下载资源
+                </button>
+            </div>
+            
+            <div class="item">
+                <h3><i class="fas fa-code"></i> 源代码</h3>
+                <p>完整的项目源代码，包含详细注释和开发文档。</p>
+                <button class="download-btn" onclick="downloadItem('源代码.zip')">
+                    <i class="fas fa-download"></i> 下载源码
+                </button>
+            </div>
+            
+            <div class="item">
+                <h3><i class="fas fa-video"></i> 教学视频</h3>
+                <p>高清教学视频，手把手教您如何使用本系统的各项功能。</p>
+                <button class="download-btn" onclick="downloadItem('教学视频.mp4')">
+                    <i class="fas fa-download"></i> 下载视频
+                </button>
+            </div>
+            
+            <div class="item">
+                <h3><i class="fas fa-music"></i> 音效素材</h3>
+                <p>高质量音效和背景音乐，适用于多媒体项目制作。</p>
+                <button class="download-btn" onclick="downloadItem('音效素材.zip')">
+                    <i class="fas fa-download"></i> 下载音效
+                </button>
+            </div>
+            
+            <div class="item">
+                <h3><i class="fas fa-book"></i> 用户手册</h3>
+                <p>详细的使用说明书和故障排除指南。</p>
+                <button class="download-btn" onclick="downloadItem('用户手册.pdf')">
+                    <i class="fas fa-download"></i> 下载手册
+                </button>
+            </div>
+        </div>
+    </div>
     
-    // 3秒后移除反馈
-    setTimeout(() => {
-      if (downloadFeedback.parentNode) {
-        document.body.removeChild(downloadFeedback);
-      }
-    }, 3000);
-  }
-  
-  // 添加CSS动画
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    <!-- 彩蛋触发器 -->
+    <div class="easter-egg-trigger" onclick="showEasterEgg()">
+        <i class="fas fa-gift"></i>
+    </div>
+    <div class="easter-egg-hint">点击发现彩蛋！</div>
     
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // 滚动监听，实现滚动时元素淡入效果
-  document.addEventListener('DOMContentLoaded', function() {
-    const items = document.querySelectorAll('.item');
+    <!-- 主彩蛋消息 -->
+    <div class="easter-egg-message" id="easterEggMessage">
+        <button class="easter-egg-close" onclick="hideEasterEgg()">×</button>
+        <div class="content">
+            <div class="emoji">🚽💦</div>
+            <div class="text">孙继远上厕所不洗手！</div>
+            <div style="font-size: 16px; opacity: 0.9; margin-top: 10px;">
+                温馨提示：记得勤洗手，保持卫生哦！🧼
+            </div>
+        </div>
+    </div>
     
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
+    <!-- 隐藏彩蛋（双击页面触发） -->
+    <div class="hidden-easter-egg" id="hiddenEasterEgg">
+        <div style="font-size: 20px; margin-bottom: 10px;">🤫 你发现了隐藏彩蛋！</div>
+        <div style="font-size: 16px;">孙继远表示：下次一定洗手！🙌</div>
+    </div>
     
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.animationPlayState = 'running';
-          observer.unobserve(entry.target);
+    <script>
+        // 下载功能
+        function downloadItem(name) {
+            const downloadFeedback = document.createElement('div');
+            downloadFeedback.innerHTML = `<i class="fas fa-check-circle"></i> 开始下载: ${name}`;
+            downloadFeedback.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #2ecc71, #27ae60);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 12px;
+                z-index: 9999;
+                font-size: 15px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.3s ease, fadeOut 0.3s ease 2s forwards;
+                box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+                border-left: 4px solid #fff;
+            `;
+            
+            document.body.appendChild(downloadFeedback);
+            
+            // 模拟下载
+            setTimeout(() => {
+                const a = document.createElement('a');
+                a.href = '#';
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }, 500);
+            
+            // 3秒后移除反馈
+            setTimeout(() => {
+                if (downloadFeedback.parentNode) {
+                    document.body.removeChild(downloadFeedback);
+                }
+            }, 3000);
         }
-      });
-    }, observerOptions);
-    
-    items.forEach(item => {
-      observer.observe(item);
-    });
-  });
-</script>
+        
+        // 显示主彩蛋
+        function showEasterEgg() {
+            const easterEgg = document.getElementById('easterEggMessage');
+            easterEgg.classList.add('show');
+            
+            // 播放音效（模拟）
+            playEasterEggSound();
+        }
+        
+        // 隐藏彩蛋
+        function hideEasterEgg() {
+            const easterEgg = document.getElementById('easterEggMessage');
+            easterEgg.classList.remove('show');
+        }
+        
+        // 显示隐藏彩蛋（点击左上角）
+        function showHiddenEasterEgg() {
+            const hiddenEgg = document.getElementById('hiddenEasterEgg');
+            hiddenEgg.classList.add('show');
+            
+            setTimeout(() => {
+                hiddenEgg.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 模拟彩蛋音效
+        function playEasterEggSound() {
+            // 这里可以添加实际音效
+            console.log("🎵 彩蛋音效播放中...");
+        }
+        
+        // 双击页面触发隐藏彩蛋
+        let clickCount = 0;
+        let clickTimer;
+        
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.closest('.easter-egg-message') || e.target.closest('.hidden-easter-egg')) {
+                return;
+            }
+            
+            const hiddenEgg = document.getElementById('hiddenEasterEgg');
+            hiddenEgg.classList.add('show');
+            
+            setTimeout(() => {
+                hiddenEgg.classList.remove('show');
+            }, 3000);
+        });
+        
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            
+            @keyframes shake {
+                0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+                25% { transform: translate(-50%, -50%) rotate(-8deg); }
+                75% { transform: translate(-50%, -50%) rotate(8deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 滚动监听，实现滚动时元素淡入效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.item');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            items.forEach(item => {
+                observer.observe(item);
+            });
+            
+            // 页面加载提示
+            setTimeout(() => {
+                console.log("🔍 彩蛋提示：尝试点击右下角的礼物图标！");
+                console.log("🎯 还有更多隐藏彩蛋等你发现...");
+            }, 1000);
+        });
+        
+        // 按键触发彩蛋（按E键）
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'e' || e.key === 'E') {
+                showEasterEgg();
+            }
+        });
+    </script>
 </body>
 </html>
