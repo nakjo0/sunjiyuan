@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>孙继远资源网</title>
+  <title>农安县实验中学九班资源网</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -13,17 +13,17 @@
       cursor: default;
     }
 
-    /* 全局基础：高级极简 */
+    /* 白色主题全局 */
     html, body {
       min-height: 100vh;
       font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      color: #111;
+      color: #333;
       line-height: 1.7;
       overflow-x: hidden;
-      background: #0a0a0a;
+      background: #ffffff;
     }
 
-    /* 视频背景容器 */
+    /* 视频背景 */
     .video-container {
       position: fixed;
       top: 0;
@@ -34,7 +34,6 @@
       overflow: hidden;
     }
 
-    /* 视频背景 */
     .video-bg {
       position: absolute;
       top: 0;
@@ -42,33 +41,32 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.8; /* 80%透明度 */
+      opacity: 0.8;
     }
 
-    /* 视频叠加层，增强可读性 */
     .video-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.85) 0%, rgba(20, 20, 40, 0.7) 100%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(250,245,248,0.85) 100%);
     }
 
-    /* 核心容器 */
+    /* 布局容器 */
     .wrap {
       max-width: 900px;
       margin: 0 auto;
-      padding: 40px 24px;
+      padding: 50px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 60px;
+      gap: 45px;
       position: relative;
       z-index: 1;
     }
 
-    /* 首页区域 - 占满整个屏幕 */
+    /* 首屏 */
     .hero-section {
       min-height: 100vh;
       display: flex;
@@ -78,210 +76,132 @@
       text-align: center;
       padding: 20px;
       position: relative;
-      overflow: hidden;
     }
 
-    /* 标题：渐入动画 */
+    /* 粉色渐变标题 */
     .title {
-      font-size: 3.5rem;
+      font-size: 3.4rem;
       font-weight: 700;
-      text-align: center;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-      color: #ffffff;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
-      background: linear-gradient(90deg, #ff7e5f, #feb47b, #86a8e7, #91eae4);
+      background: linear-gradient(90deg, #ff9bbb, #f87098, #ff5e9a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      letter-spacing: 1px;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeInUp 1.2s ease forwards;
     }
 
     .subtitle {
-      font-size: 1.5rem;
-      color: #e0e0e0;
-      text-align: center;
+      font-size: 1.4rem;
+      color: #666;
+      max-width: 600px;
       opacity: 0;
       animation: fadeInUp 1.2s ease 0.3s forwards;
-      margin-bottom: 40px;
-      max-width: 600px;
-      line-height: 1.6;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* 滚动指示器 */
+    /* 滚动提示 */
     .scroll-indicator {
       position: absolute;
-      bottom: 40px;
+      bottom: 45px;
       left: 50%;
       transform: translateX(-50%);
       opacity: 0;
       animation: fadeInUp 1s ease 1.5s forwards;
-      color: #aaa;
+      color: #999;
       font-size: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-    }
-
-    .scroll-indicator i {
-      font-size: 24px;
-      animation: bounce 2s infinite;
-    }
-
-    /* 内容模块：依次渐入 */
-    .item {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-      position: relative;
-      padding: 30px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      border-color: rgba(134, 168, 231, 0.5);
-    }
-
-    /* 图片：优雅动效 + 圆角 + 下载鼠标样式 */
-    .item img {
-      width: 100%;
-      height: auto;
-      border-radius: 16px;
-      transition: all 0.4s ease;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-      cursor: pointer; /* 鼠标变成小手，提示可点击 */
-      object-fit: cover;
-      max-height: 500px;
-    }
-
-    /* 悬浮微动：高级感 */
-    .item img:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .item h2 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #ffffff;
-      margin-top: 10px;
-    }
-
-    /* 下载提示文字 */
-    .download-tip {
-      font-size: 15px;
-      color: #86a8e7;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
       gap: 8px;
     }
 
+    .scroll-indicator i {
+      font-size: 22px;
+      color: #ff76a2;
+      animation: bounce 2s infinite;
+    }
+
+    /* 卡片样式：白色+粉色点缀 */
+    .item {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 8px 28px rgba(255, 118, 162, 0.08);
+      border: 1px solid rgba(255, 118, 162, 0.12);
+      transition: all 0.35s ease;
+      opacity: 0;
+      animation: fadeInUp 1.2s ease forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 14px 36px rgba(255, 118, 162, 0.15);
+      border-color: rgba(255, 118, 162, 0.3);
+    }
+
+    /* 图片 */
+    .item img {
+      width: 100%;
+      max-height: 480px;
+      object-fit: cover;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .item img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+    }
+
+    .item h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    /* 粉色下载提示 */
+    .download-tip {
+      font-size: 14px;
+      color: #ff5e9a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .download-tip i {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     /* 底部文字 */
     .bottom {
-      margin-top: 80px;
-      padding: 50px 0;
+      margin-top: 60px;
+      padding: 40px 0;
       text-align: center;
-      font-size: 1.5rem;
-      color: #feb47b;
+      font-size: 1.3rem;
+      color: #ff5e9a;
       opacity: 0;
-      animation: fadeInUp 1.2s ease 1.2s forwards;
-      position: relative;
-      font-weight: 500;
+      animation: fadeInUp 1.2s ease forwards;
     }
 
-    /* 装饰元素 */
-    .decoration {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(134, 168, 231, 0.1);
-      z-index: -1;
-      filter: blur(40px);
-    }
-
-    .decoration-1 {
-      width: 300px;
-      height: 300px;
-      top: 10%;
-      left: 5%;
-      animation: float 8s infinite ease-in-out;
-    }
-
-    .decoration-2 {
-      width: 200px;
-      height: 200px;
-      bottom: 20%;
-      right: 10%;
-      animation: float 10s infinite ease-in-out 1s;
-      background: rgba(254, 180, 123, 0.1);
-    }
-
-    .decoration-3 {
-      width: 150px;
-      height: 150px;
-      top: 40%;
-      right: 15%;
-      animation: float 12s infinite ease-in-out 2s;
-      background: rgba(255, 126, 95, 0.1);
-    }
-
-    /* 渐入动画核心 */
+    /* 动画 */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 弹跳动画 */
     @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-10px);
-      }
-      60% {
-        transform: translateY(-5px);
-      }
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
     }
 
-    /* 浮动动画 */
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0) translateX(0);
-      }
-      33% {
-        transform: translateY(-20px) translateX(20px);
-      }
-      66% {
-        transform: translateY(10px) translateX(-10px);
-      }
-    }
-
-    /* 依次延迟：让页面更有层次 */
+    /* 卡片动画延迟 */
     .item1 { animation-delay: 0.4s; }
     .item2 { animation-delay: 0.6s; }
     .item3 { animation-delay: 0.8s; }
@@ -290,83 +210,33 @@
     .item6 { animation-delay: 1.4s; }
     .item7 { animation-delay: 1.6s; }
 
-    /* 响应式设计 */
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.5rem;
-      }
-
-      .subtitle {
-        font-size: 1.2rem;
-      }
-
-      .item {
-        padding: 20px;
-      }
-
-      .item h2 {
-        font-size: 1.5rem;
-      }
-
-      .bottom {
-        font-size: 1.3rem;
-      }
-
-      .decoration {
-        display: none;
-      }
+    /* 响应式 */
+    @media (max-width:768px) {
+      .title { font-size: 2.5rem; }
+      .item { padding: 24px; }
+      .wrap { padding: 40px 16px; gap: 40px; }
     }
 
-    @media (max-width: 480px) {
-      .title {
-        font-size: 2rem;
-      }
-
-      .subtitle {
-        font-size: 1rem;
-      }
-
-      .wrap {
-        padding: 20px 15px;
-        gap: 40px;
-      }
-
-      .item {
-        padding: 15px;
-      }
+    @media (max-width:480px) {
+      .title { font-size: 2.1rem; }
+      .item { padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-<!-- 视频背景区域 -->
+<!-- 视频背景 -->
 <div class="video-container">
-  <!-- 
-    视频接口说明：
-    您可以将视频地址替换为以下任一格式：
-    1. 本地视频: ./background-video.mp4
-    2. 在线视频: https://example.com/background-video.mp4
-    3. 推荐使用高质量背景视频，确保文件大小适中
-  -->
   <video class="video-bg" autoplay muted loop playsinline>
-    <!-- 这里可以替换为您的视频地址 -->
     <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-lake-1125-large.mp4" type="video/mp4">
-    <!-- 备用视频源 -->
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-lake-1125-large.mp4" type="video/mp4">
-    您的浏览器不支持视频标签。
   </video>
   <div class="video-overlay"></div>
 </div>
 
-<!-- 装饰元素 -->
-<div class="decoration decoration-1"></div>
-<div class="decoration decoration-2"></div>
-<div class="decoration decoration-3"></div>
-
-<!-- 首页区域 -->
+<!-- 首屏 -->
 <section class="hero-section">
   <h1 class="title">孙继远资源网</h1>
-  <p class="subtitle">探索孙继远的精彩瞬间，收藏珍贵记忆，每一张图片都承载着独特的故事与情感</p>
+  <p class="subtitle">探索精彩瞬间，收藏珍贵记忆，每一张图片都承载着独特的故事与情感</p>
 
   <div class="scroll-indicator">
     <i class="fas fa-chevron-down"></i>
@@ -374,25 +244,23 @@
   </div>
 </section>
 
+<!-- 内容卡片 -->
 <div class="wrap">
-  <!-- 图片1 + 点击下载 -->
   <div class="item item1">
     <img src="./111.jpg" alt="孙继远思考" onclick="downloadImage(this.src, '孙继远思考.jpg')">
     <h2>孙继远思考</h2>
     <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
   </div>
 
-  <!-- 图片2 + 点击下载 -->
   <div class="item item2">
     <img src="./2.jpg" alt="孙继远过生日" onclick="downloadImage(this.src, '孙继远过生日.jpg')">
     <h2>孙继远过生日</h2>
     <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
   </div>
 
-  <!-- 图片3 + 点击下载 -->
   <div class="item item3">
-    <img src="./3.jpg" alt="孙继远在上厕所" onclick="downloadImage(this.src, '孙继远在网吧.jpg')">
-    <h2>孙继远在厕所</h2>
+    <img src="./3.jpg" alt="孙继远在网吧" onclick="downloadImage(this.src, '孙继远在网吧.jpg')">
+    <h2>孙继远在网吧</h2>
     <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
   </div>
 
@@ -410,100 +278,55 @@
   </div>
 
   <div class="item item6">
-    <img src="./6.jpg" alt="孙继远上体育课" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
-    <img src="./6.JPG" alt="孙继远上体育课" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
-    <h2>孙继远上体育课2</h2>
+    <img src="./6.jpg" alt="孙继远上厕所" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
+    <img src="./6.JPG" alt="孙继远上厕所" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
+    <h2>孙继远上厕所</h2>
     <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
   </div>
 
   <div class="item item7">
-    <img src="./7.jpg" alt="孙继远上网吧" onclick="downloadImage(this.src, '孙继远上厕所2.jpg')">
+    <img src="./7.jpg" alt="孙继远上网吧" onclick="downloadImage(this.src, '孙继远上网吧.jpg')">
     <h2>孙继远上网吧</h2>
     <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
   </div>
 </div>
 
 <div class="bottom">
-  <i class="fas fa-exclamation-circle"></i> 孙继远欠我两块钱
+  <i class="fas fa-heart"></i> 孙继远欠我两块钱
 </div>
 
-<!-- 图片下载核心JS -->
+<!-- 下载功能JS -->
 <script>
-  // 图片下载功能
   function downloadImage(url, name) {
     const link = document.createElement('a');
-    link.download = name; // 下载后的文件名
+    link.download = name;
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    // 添加下载反馈效果
-    const downloadFeedback = document.createElement('div');
-    downloadFeedback.innerHTML = `<i class="fas fa-check-circle"></i> 开始下载: ${name}`;
-    downloadFeedback.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(134, 168, 231, 0.9);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      z-index: 9999;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: slideIn 0.3s ease, fadeOut 0.3s ease 2s forwards;
+    // 粉色下载提示
+    const tip = document.createElement('div');
+    tip.innerHTML = `<i class="fas fa-check-circle"></i> 已开始下载：${name}`;
+    tip.style.cssText = `
+      position: fixed; top:20px; right:20px;
+      background:#ff5e9a; color:white;
+      padding:12px 20px; border-radius:10px;
+      z-index:999; font-size:14px;
+      box-shadow:0 4px 15px rgba(255,94,154,0.2);
+      animation: slideIn 0.3s, fadeOut 0.3s 2.5s forwards;
     `;
-    document.body.appendChild(downloadFeedback);
-
-    // 3秒后移除反馈
-    setTimeout(() => {
-      if (downloadFeedback.parentNode) {
-        document.body.removeChild(downloadFeedback);
-      }
-    }, 3000);
+    document.body.appendChild(tip);
+    setTimeout(()=>tip.remove(), 3000);
   }
 
-  // 添加CSS动画
+  // 动画
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
+    @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+    @keyframes fadeOut { from{opacity:1} to{opacity:0} }
   `;
   document.head.appendChild(style);
-
-  // 滚动监听，实现滚动时元素淡入效果
-  document.addEventListener('DOMContentLoaded', function() {
-    const items = document.querySelectorAll('.item');
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.animationPlayState = 'running';
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    items.forEach(item => {
-      observer.observe(item);
-    });
-  });
 </script>
 </body>
 </html>
