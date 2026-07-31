@@ -10,396 +10,779 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      cursor: default;
     }
 
-    /* 白色主题全局 */
-    html, body {
-      min-height: 100vh;
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      color: #333;
-      line-height: 1.7;
+    :root {
+      --bg-primary: #fafafa;
+      --bg-card: rgba(255, 255, 255, 0.72);
+      --accent: #d4849e;
+      --accent-light: rgba(212, 132, 158, 0.12);
+      --text-primary: #1a1a1a;
+      --text-secondary: #6b6b6b;
+      --text-muted: #9a9a9a;
+      --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 24px 64px rgba(0, 0, 0, 0.12);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --transition: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
       overflow-x: hidden;
-      background: #ffffff;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* 视频背景 */
-    .video-container {
+    /* ===== 背景氛围层 ===== */
+    .ambient-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(212, 132, 158, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(200, 160, 180, 0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #faf5f7 0%, #fafafa 50%, #faf6f8 100%);
+    }
+
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
       z-index: -1;
-      overflow: hidden;
+      pointer-events: none;
+      animation: orbFloat 20s ease-in-out infinite;
     }
 
-    .video-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.8;
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212, 132, 158, 0.15), transparent 70%);
+      top: -10%;
+      left: -5%;
+      animation-delay: 0s;
     }
 
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(250,245,248,0.85) 100%);
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(190, 160, 180, 0.1), transparent 70%);
+      bottom: 10%;
+      right: -5%;
+      animation-delay: -7s;
     }
 
-    /* 布局容器 */
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 50px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 45px;
-      position: relative;
-      z-index: 1;
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(210, 180, 195, 0.12), transparent 70%);
+      top: 50%;
+      left: 50%;
+      animation-delay: -14s;
     }
 
-    /* 首屏 */
-    .hero-section {
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -20px) scale(1.05); }
+      50% { transform: translate(-20px, 30px) scale(0.95); }
+      75% { transform: translate(20px, 20px) scale(1.02); }
+    }
+
+    /* ===== 首屏 ===== */
+    .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 20px;
+      padding: 40px 24px;
       position: relative;
+      perspective: 1200px;
     }
 
-    /* 粉色渐变标题 */
-    .title {
-      font-size: 3.4rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #ff9bbb, #f87098, #ff5e9a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
+    .hero-content {
+      transform-style: preserve-3d;
+      animation: heroFloat 6s ease-in-out infinite;
     }
 
-    .subtitle {
-      font-size: 1.4rem;
-      color: #666;
-      max-width: 600px;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease 0.3s forwards;
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0) rotateX(0); }
+      50% { transform: translateY(-12px) rotateX(1deg); }
     }
 
-    /* 滚动提示 */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 45px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      animation: fadeInUp 1s ease 1.5s forwards;
-      color: #999;
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
+    .hero-badge {
+      display: inline-flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .scroll-indicator i {
-      font-size: 22px;
-      color: #ff76a2;
-      animation: bounce 2s infinite;
-    }
-
-    /* 卡片样式：白色+粉色点缀 */
-    .item {
-      width: 100%;
-      background: #ffffff;
-      border-radius: 22px;
-      padding: 30px;
-      box-shadow: 0 8px 28px rgba(255, 118, 162, 0.08);
-      border: 1px solid rgba(255, 118, 162, 0.12);
-      transition: all 0.35s ease;
+      padding: 8px 20px;
+      background: rgba(212, 132, 158, 0.1);
+      border: 1px solid rgba(212, 132, 158, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(10px);
       opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
+      animation: fadeInUp 1s var(--transition) 0.2s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s var(--transition) 0.4s forwards;
+    }
+
+    .hero-title span {
+      display: block;
+      font-size: 0.35em;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 480px;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeInUp 1s var(--transition) 0.6s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeInUp 1s var(--transition) 1.2s forwards;
     }
 
-    .item:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 14px 36px rgba(255, 118, 162, 0.15);
-      border-color: rgba(255, 118, 162, 0.3);
+    .scroll-hint i {
+      font-size: 18px;
+      color: var(--accent);
+      animation: gentleBounce 2.5s ease-in-out infinite;
     }
 
-    /* 图片 */
-    .item img {
-      width: 100%;
-      max-height: 480px;
-      object-fit: cover;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.35s ease;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(8px); opacity: 1; }
     }
 
-    .item img:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.1);
-    }
-
-    .item h2 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: #444;
-    }
-
-    /* 粉色下载提示 */
-    .download-tip {
-      font-size: 14px;
-      color: #ff5e9a;
+    /* ===== 图片展示区 ===== */
+    .gallery {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
       display: flex;
+      flex-direction: column;
+      gap: 48px;
+      perspective: 1500px;
+    }
+
+    /* 3D 悬浮卡片 */
+    .photo-card {
+      position: relative;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 10px;
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow:
+        var(--shadow-md),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform-style: preserve-3d;
+      transition: all 0.6s var(--transition);
+      opacity: 0;
+      transform: translateY(60px) rotateX(8deg);
+      will-change: transform, opacity;
+    }
+
+    .photo-card.visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+
+    .photo-card:hover {
+      transform: translateY(-8px) translateZ(40px) rotateX(-2deg);
+      box-shadow:
+        var(--shadow-hover),
+        0 0 0 1px rgba(212, 132, 158, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    /* 卡片内图片容器 */
+    .photo-frame {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #f5f0f2;
+      aspect-ratio: 4 / 3;
+      cursor: pointer;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s var(--transition), filter 0.6s ease;
+      will-change: transform;
+    }
+
+    .photo-card:hover .photo-frame img {
+      transform: scale(1.06);
+    }
+
+    /* 图片上的微妙光泽层 */
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(0, 0, 0, 0.03) 100%
+      );
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .photo-card:hover .photo-frame::after {
+      opacity: 1;
+    }
+
+    /* 图片信息区 */
+    .photo-meta {
+      padding: 20px 16px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .photo-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .photo-action {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
+      padding: 8px 16px;
+      background: rgba(212, 132, 158, 0.08);
+      border: 1px solid rgba(212, 132, 158, 0.15);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.3s var(--transition);
+      user-select: none;
     }
 
-    .download-tip i {
+    .photo-action:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(212, 132, 158, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .photo-action i {
+      font-size: 11px;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-action:hover i {
+      transform: translateY(1px);
+    }
+
+    /* 编号装饰 */
+    .photo-index {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+      letter-spacing: 0.05em;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all 0.4s var(--transition);
+    }
+
+    .photo-card:hover .photo-index {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== 底部 ===== */
+    .footer {
+      text-align: center;
+      padding: 80px 24px 60px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 2;
+    }
+
+    .footer i {
+      color: var(--accent);
+      margin: 0 4px;
+    }
+
+    /* ===== 下载提示 Toast ===== */
+    .toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      background: rgba(30, 30, 30, 0.92);
+      color: #fff;
+      font-size: 14px;
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: all 0.5s var(--transition);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .toast i {
+      color: #e8a4b8;
       font-size: 16px;
     }
 
-    /* 底部文字 */
-    .bottom {
-      margin-top: 60px;
-      padding: 40px 0;
-      text-align: center;
-      font-size: 1.3rem;
-      color: #ff5e9a;
-      opacity: 0;
-      animation: fadeInUp 1.2s ease forwards;
-    }
-
-    /* 动画 */
+    /* ===== 动画 ===== */
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    @keyframes bounce {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
+    /* ===== 响应式 ===== */
+    @media (max-width: 640px) {
+      .gallery {
+        padding: 40px 16px 80px;
+        gap: 36px;
+      }
 
-    /* 卡片动画延迟 */
-    .item1 { animation-delay: 0.4s; }
-    .item2 { animation-delay: 0.6s; }
-    .item3 { animation-delay: 0.8s; }
-    .item4 { animation-delay: 1.0s; }
-    .item5 { animation-delay: 1.2s; }
-    .item6 { animation-delay: 1.4s; }
-    .item7 { animation-delay: 1.6s; }
+      .photo-card {
+        padding: 8px;
+        border-radius: 20px;
+      }
 
-    /* 响应式 */
-    @media (max-width:768px) {
-      .title { font-size: 2.5rem; }
-      .item { padding: 24px; }
-      .wrap { padding: 40px 16px; gap: 40px; }
-    }
+      .photo-meta {
+        padding: 16px 12px 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
 
-    @media (max-width:480px) {
-      .title { font-size: 2.1rem; }
-      .item { padding: 20px; }
+      .photo-title {
+        font-size: 1rem;
+      }
+
+      .footer {
+        padding: 60px 16px 40px;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- 视频背景 -->
-<div class="video-container">
-  <video class="video-bg" autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-lake-1125-large.mp4" type="video/mp4">
-  </video>
-  <div class="video-overlay"></div>
-</div>
+  <!-- 氛围背景 -->
+  <div class="ambient-bg"></div>
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
 
-<!-- 首屏 -->
-<section class="hero-section">
-  <h1 class="title">农安县实验中学九班资源网</h1>
-  <p class="subtitle"></p>
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-camera" style="font-size:11px;"></i>
+        中国人能飞
+      </div>
+      <h1 class="hero-title">
+        农安县实验中学
+        <span>九班资源网</span>
+      </h1>
+      <p class="hero-subtitle"></p>
+    </div>
+    <div class="scroll-hint">
+      <i class="fas fa-chevron-down">111</i>
+      <span>向下赤石</span>
+    </div>
+  </section>
 
-  <div class="scroll-indicator">
-    <i class="fas fa-chevron-down"></i>
-    <span>向下滚动浏览资源</span>
+  <!-- 图片画廊 -->
+  <main class="gallery">
+
+    <article class="photo-card" data-index="01">
+      <span class="photo-index">01</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远思考.jpg')">
+        <img src="./111.jpg" alt="孙继远思考" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远思考</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="02">
+      <span class="photo-index">02</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远过生日.jpg')">
+        <img src="./2.jpg" alt="孙继远过生日" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远过生日</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="03">
+      <span class="photo-index">03</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远在网吧.jpg')">
+        <img src="./3.jpg" alt="孙继远在网吧" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远在网吧</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="04">
+      <span class="photo-index">04</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远比手势.jpg')">
+        <img src="./4.jpg" alt="孙继远比手势" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远比手势</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="05">
+      <span class="photo-index">05</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远上体育课.jpg')">
+        <img src="./5.JPG" alt="孙继远上体育课" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远上体育课</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="06">
+      <span class="photo-index">06</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远上厕所.jpg')">
+        <img src="./6.JPG" alt="孙继远上厕所" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远上厕所</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="07">
+      <span class="photo-index">07</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远上网吧.jpg')">
+        <img src="./7.jpg" alt="孙继远上网吧" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远上网吧</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="08">
+      <span class="photo-index">08</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博1.jpg')">
+        <img src="./8.JPG" alt="赵启博1" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博 ①</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="09">
+      <span class="photo-index">09</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博2.jpg')">
+        <img src="./9.JPG" alt="赵启博2" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博 ②</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="10">
+      <span class="photo-index">10</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博3.jpg')">
+        <img src="./10.JPG" alt="赵启博3" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博 ③</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="11">
+      <span class="photo-index">11</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远.jpg')">
+        <img src="./11.JPG" alt="孙继远" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远？</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="12">
+      <span class="photo-index">12</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远.jpg')">
+        <img src="./12.JPG" alt="孙继远" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远 #%%@#</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="13">
+      <span class="photo-index">13</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远.jpg')">
+        <img src="./13.JPG" alt="孙继远" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远 &lt;￥#%￥#&gt;</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="14">
+      <span class="photo-index">14</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '彩蛋.jpg')">
+        <img src="./14.JPG" alt="彩蛋" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">彩蛋</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="15">
+      <span class="photo-index">15</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '老太太微笑.jpg')">
+        <img src="./15.JPG" alt="老太太微笑" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">老太太微笑</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="16">
+      <span class="photo-index">16</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '黑白迟浩宇.jpg')">
+        <img src="./16.JPG" alt="黑白迟浩宇" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">黑白迟浩宇</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="17">
+      <span class="photo-index">17</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '就是黑.jpg')">
+        <img src="./17.JPG" alt="就是黑" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">就是黑</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="18">
+      <span class="photo-index">18</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博4.jpg')">
+        <img src="./18.jpg" alt="赵启博4" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博 ④</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="19">
+      <span class="photo-index">19</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博5.jpg')">
+        <img src="./19.jpg" alt="赵启博5" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博 ⑤</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="20">
+      <span class="photo-index">20</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '亲亲.jpg')">
+        <img src="./20.jpg" alt="亲亲" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">亲亲</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="21">
+      <span class="photo-index">21</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '孙继远.jpg')">
+        <img src="./21.jpg" alt="孙继远" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">孙继远</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+    <article class="photo-card" data-index="22">
+      <span class="photo-index">22</span>
+      <div class="photo-frame" onclick="downloadImage(this.querySelector('img').src, '赵启博背语文.jpg')">
+        <img src="./22.jpg" alt="赵启博背语文" loading="lazy">
+      </div>
+      <div class="photo-meta">
+        <h2 class="photo-title">赵启博背语文</h2>
+        <span class="photo-action"><i class="fas fa-download"></i> 下载</span>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <i class="fas fa-heart"></i> 孙继远欠我七块钱<br>
+    孙继远上厕所不洗手
+  </footer>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastText">已开始下载</span>
   </div>
-</section>
 
-<!-- 内容卡片 -->
-<div class="wrap">
-  <div class="item item1">
-    <img src="./111.jpg" alt="孙继远思考" onclick="downloadImage(this.src, '孙继远思考.jpg')">
-    <h2>孙继远思考</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+  <script>
+    // ===== 滚动视差入场动画 =====
+    const observerOptions = {
+      threshold: 0.12,
+      rootMargin: '0px 0px -60px 0px'
+    };
 
-  <div class="item item2">
-    <img src="./2.jpg" alt="孙继远过生日" onclick="downloadImage(this.src, '孙继远过生日.jpg')">
-    <h2>孙继远过生日</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
 
-  <div class="item item3">
-    <img src="./3.jpg" alt="孙继远在网吧" onclick="downloadImage(this.src, '孙继远在网吧.jpg')">
-    <h2>孙继远在网吧</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+    document.querySelectorAll('.photo-card').forEach(card => {
+      cardObserver.observe(card);
+    });
 
-  <div class="item item4">
-    <img src="./4.jpg" alt="孙继远比手势" onclick="downloadImage(this.src, '孙继远比手势.jpg')">
-    <h2>孙继远比手势</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+    // ===== 3D 鼠标跟随倾斜效果 =====
+    document.querySelectorAll('.photo-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -4;
+        const rotateY = ((x - centerX) / centerX) * 4;
 
-  <div class="item item5">
-    <img src="./5.JPG" alt="孙继远上体育课" onclick="downloadImage(this.src, '孙继远上体育课.jpg')">
-    <h2>孙继远上体育课</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+        card.style.transform = `translateY(-8px) translateZ(40px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
 
-  <div class="item item6">
-    <img src="./6.JPG" alt="孙继远上厕所" onclick="downloadImage(this.src, '孙继远上厕所.jpg')">
-    <h2>孙继远上厕所</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
 
-  <div class="item item7">
-    <img src="./7.jpg" alt="孙继远上网吧" onclick="downloadImage(this.src, '孙继远上网吧.jpg')">
-    <h2>孙继远上网吧</h2>
-    <span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>
-  </div>
-  <div class="item item7">    
-<img src="./8.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博1</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./9.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博2</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./10.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博3</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./11.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>孙继远？</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./12.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>孙继远#%%@#</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./13.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>孙继远<￥#%￥#/h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./14.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>彩蛋</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./15.JPG" alt="" onclick="downloadImage(this.src, 'jpg')">    
-<h2>老太太微笑</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./16.JPG" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>黑白迟浩宇</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./17.JPG" alt="就是黑" onclick="downloadImage(this.src, '就是黑.jpg')">    
-<h2>就是黑</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./18.jpg" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博4</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./19.jpg" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博5</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./20.jpg" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>亲亲</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./21.jpg" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>孙继远</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-  <div class="item item7">    
-<img src="./22.jpg" alt="" onclick="downloadImage(this.src, '.jpg')">    
-<h2>赵启博背语文</h2>    
-<span class="download-tip"><i class="fas fa-download"></i> 点击图片即可下载</span>  
-</div>
-</div>
+    // ===== 下载功能 =====
+    function downloadImage(url, name) {
+      const link = document.createElement('a');
+      link.download = name;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-<div class="bottom">
-  <i class="fas fa-heart"></i> 孙继远欠我七块钱<br>孙继远上厕所不洗手
-</div>
+      showToast(`已开始下载：${name}`);
+    }
 
-<!-- 下载功能JS -->
-<script>
-  function downloadImage(url, name) {
-    const link = document.createElement('a');
-    link.download = name;
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toastText');
+      text.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+  </script>
 
-    // 粉色下载提示
-    const tip = document.createElement('div');
-    tip.innerHTML = `<i class="fas fa-check-circle"></i> 已开始下载：${name}`;
-    tip.style.cssText = `
-      position: fixed; top:20px; right:20px;
-      background:#ff5e9a; color:white;
-      padding:12px 20px; border-radius:10px;
-      z-index:999; font-size:14px;
-      box-shadow:0 4px 15px rgba(255,94,154,0.2);
-      animation: slideIn 0.3s, fadeOut 0.3s 2.5s forwards;
-    `;
-    document.body.appendChild(tip);
-    setTimeout(()=>tip.remove(), 3000);
-  }
-
-  // 动画
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
-    @keyframes fadeOut { from{opacity:1} to{opacity:0} }
-  `;
-  document.head.appendChild(style);
-</script>
 </body>
 </html>
